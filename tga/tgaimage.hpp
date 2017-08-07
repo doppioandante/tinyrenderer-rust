@@ -5,74 +5,66 @@
 
 #pragma pack(push,1)
 struct TGA_Header {
-	char idlength;
-	char colormaptype;
-	char datatypecode;
-	short colormaporigin;
-	short colormaplength;
-	char colormapdepth;
-	short x_origin;
-	short y_origin;
-	short width;
-	short height;
-	char  bitsperpixel;
-	char  imagedescriptor;
+    char idlength;
+    char colormaptype;
+    char datatypecode;
+    short colormaporigin;
+    short colormaplength;
+    char colormapdepth;
+    short x_origin;
+    short y_origin;
+    short width;
+    short height;
+    char  bitsperpixel;
+    char  imagedescriptor;
 };
 #pragma pack(pop)
 
-
 struct TGAColor {
-	union {
-		struct {
-			unsigned char b, g, r, a;
-		};
-		unsigned char raw[4];
-		unsigned int val;
-	};
-	int bytespp;
-
+    unsigned char bgra[4];
+    unsigned char bytespp;
 
     TGAColor();
-    TGAColor(unsigned char R, unsigned char G, unsigned char B, unsigned char A);
-    TGAColor(int v, int bpp);
-    TGAColor(const TGAColor &c);
-    TGAColor(const unsigned char *p, int bpp);
-    TGAColor & operator =(const TGAColor &c);
+	TGAColor(unsigned char R, unsigned char G, unsigned char B, unsigned char A=255);
+    TGAColor(unsigned char v);
+    TGAColor(const unsigned char *p, unsigned char bpp);
+    unsigned char& operator[](const int i);
+    TGAColor operator *(float intensity) const;
 };
-
 
 class TGAImage {
 private:
-	unsigned char* data;
-	int width;
-	int height;
-	int bytespp;
+    unsigned char* data;
+    int width;
+    int height;
+    int bytespp;
 
-	bool   load_rle_data(std::ifstream &in);
-	bool unload_rle_data(std::ofstream &out);
+    bool   load_rle_data(std::ifstream &in);
+    bool unload_rle_data(std::ofstream &out);
 public:
-	enum Format {
-		GRAYSCALE=1, RGB=3, RGBA=4
-	};
+    enum Format {
+        GRAYSCALE=1, RGB=3, RGBA=4
+    };
 
-	TGAImage();
-	TGAImage(int w, int h, int bpp);
-	TGAImage(const TGAImage &img);
-	bool read_tga_file(const char *filename);
-	bool write_tga_file(const char *filename, bool rle=true);
-	bool flip_horizontally();
-	bool flip_vertically();
-	bool scale(int w, int h);
-	TGAColor get(int x, int y);
-	bool set(int x, int y, TGAColor c);
-	bool set2(int x, int y, const TGAColor& c);
-	~TGAImage();
-	TGAImage & operator =(const TGAImage &img);
-	int get_width();
-	int get_height();
-	int get_bytespp();
-	unsigned char *buffer();
-	void clear();
+    TGAImage();
+    TGAImage(int w, int h, int bpp);
+    TGAImage(const TGAImage &img);
+    bool read_tga_file(const char *filename);
+    bool write_tga_file(const char *filename, bool rle=true);
+    bool flip_horizontally();
+    bool flip_vertically();
+    bool scale(int w, int h);
+    TGAColor get(int x, int y);
+    bool set(int x, int y, TGAColor &c);
+    bool set(int x, int y, const TGAColor &c);
+    ~TGAImage();
+    TGAImage & operator =(const TGAImage &img);
+    int get_width();
+    int get_height();
+    int get_bytespp();
+    unsigned char *buffer();
+    void clear();
 };
 
 #endif //__IMAGE_H__
+

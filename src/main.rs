@@ -21,7 +21,7 @@ fn main() {
     unsafe {
         let mut image = TGAImage::new1(100, 100, TGAImage_Format::RGB as c_int);
         let color = TGAColor::new1(255, 0, 0, 255);
-        image.set(52, 41, color);
+        image.set2(52, 41, &color);
         image.flip_vertically();
         image.write_tga_file(CString::new("output.tga").unwrap().as_ptr(), true);
         image.destruct();

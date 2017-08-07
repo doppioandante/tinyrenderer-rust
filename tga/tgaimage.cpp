@@ -291,6 +291,10 @@ bool TGAImage::set(int x, int y, TGAColor c) {
 	return true;
 }
 
+bool TGAImage::set2(int x, int y,const TGAColor& c) {
+	return set(x, y, c);
+}
+
 int TGAImage::get_bytespp() {
 	return bytespp;
 }
